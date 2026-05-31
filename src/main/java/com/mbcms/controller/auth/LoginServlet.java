@@ -37,24 +37,24 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        String loginId  = req.getParameter("username");
+        String username  = req.getParameter("username");
         String password = req.getParameter("password");
 
-        if (loginId == null || loginId.trim().isEmpty()
+        if (username == null || username.trim().isEmpty()
                 || password == null || password.isEmpty()) {
             req.setAttribute("errorMsg", "Vui long nhap tai khoan va mat khau.");
             req.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(req, resp);
             return;
         }
 
-        loginId = loginId.trim();
+        username = username.trim();
 
         Customer customer = null;
         Employee employee = null;
         String debugInfo = null;
 
         try {
-            customer = authService.loginCustomer(loginId, password);
+            customer = authService.loginCustomer(username, password);
         } catch (Exception ex) {
             debugInfo = "loginCustomer exception: " + ex.getMessage();
             ex.printStackTrace();
@@ -72,7 +72,7 @@ public class LoginServlet extends HttpServlet {
         }
 
         try {
-            employee = authService.loginEmployee(loginId, password);
+            employee = authService.loginEmployee(username, password);
         } catch (Exception ex) {
             debugInfo = (debugInfo == null ? "" : debugInfo + " | ")
                       + "loginEmployee exception: " + ex.getMessage();
@@ -99,7 +99,7 @@ public class LoginServlet extends HttpServlet {
         // --- Login that bai: hien thi ly do ro hon de debug ---
         String msg = "Tai khoan hoac mat khau khong chinh xac.";
         req.setAttribute("errorMsg", msg);
-        req.setAttribute("loginId", loginId);
+        req.setAttribute("username", username);
         req.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(req, resp);
     }
 }
